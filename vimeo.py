@@ -8,7 +8,6 @@ import matplotlib.pyplot as plt
 Step 0: What does the data look like?
 Let's import the data set using pandas into a DataFrame object and ask it some questions.
 '''
-
 video_df = pd.read_csv("similar-staff-picks-challenge/similar-staff-picks-challenge-clips.csv")
 print("Data shape: " + str(video_df.shape))
 print("\nInfo:")
@@ -17,25 +16,34 @@ print("\nMissing Entries:")
 print(video_df.isnull().sum())
 
 
+
 '''
 Step 1: Data Processing
-In this stage, we need to "clean up" the data. This involves removing or accounting for null fields,
-removing invaluable information, and determining which fields are best the classify the dataset.
-
-The twelve features are:
-
+In this stage, I need to "clean up" the data. This involves removing or accounting for null fields and
+removing invaluable information.
 '''
+
+
 
 '''
 Step 2: Feature Selection
-Which ones I will choose & why...
-
+In this stage, I determine which fields best classify the dataset and why. I ascertain other features from the given fields.
+frequency–inverse document frequency of "description" field
+---------> first need to clean this field up... there are null values & some of them just don't make any sense
+---------> https://towardsdatascience.com/how-i-used-machine-learning-to-classify-emails-and-turn-them-into-insights-efed37c1e66
+---------> http://scikit-learn.org/stable/modules/feature_extraction.html
+duration field
+total_comments field 
+thumbnail field
+---------> extract a few features from the thumbnails such as: brightness, exposure, translation, rotation, scale, symmetry, intensity
 '''
+
 
 
 '''
 Step 3: Modeling
-Which learning model I chose & why...
+In this stage, I determine which machine learning model is appropriate for the situation.
+
 For starters, it is clear I must use an unsupervised machine learning model to classify
 the data. Although I am given the "categories" that each video is put in, videos in 
 the same category aren't necessarily "similar." Furthermore, I don't need a model that
@@ -46,7 +54,10 @@ attempts to do.
 The best machine learning model to do such a job is clustering. Clustering
 attempts to segregate groups of data points with similar traits and put them
 into clusters. This perfectly aligns with the goal of the project.
+
+For a given input (from the supplied data set), the model should output its 10 closest neighbors.
 '''
+
 
 
 '''
