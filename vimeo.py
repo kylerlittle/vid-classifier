@@ -14,15 +14,18 @@ print("\nInfo:")
 print(video_df.info())
 print("\nMissing Entries:")
 print(video_df.isnull().sum())
-
-
+print("\nStructure:")
+print(video_df.head(5))   # first 5 rows
+fig = plt.figure()
+video_df.hist(column='duration')
+#plt.show()
 
 '''
 Step 1: Data Processing
 In this stage, I need to "clean up" the data. This involves removing or accounting for null fields and
 removing invaluable information.
 '''
-
+# There are 105 missing entries in 'caption' field; need to fix this
 
 
 '''
@@ -37,7 +40,22 @@ total_comments field
 thumbnail field
 ---------> extract a few features from the thumbnails such as: brightness, exposure, translation, rotation, scale, symmetry, intensity
 '''
+from PIL import Image
+import requests
+import urllib
+from io import BytesIO
+def extract_im_brightness(url):
+    response = urllib.urlopen(url)
+    #response = requests.get(url, stream=True)
+    byteImg = np.array(Image.open(BytesIO(response.read())))
+    
 
+number_of_features = 10
+feature_matrix = np.zeros((video_df.shape[0], number_of_features))
+for index, row in video_df.iterrows():
+    if index == 1:
+        extract_im_brightness(row['thumbnail'])
+        #print(row['id'])
 
 
 '''
