@@ -1,4 +1,5 @@
 
+
 # Import appropriate libraries
 import pandas as pd
 import numpy as np
@@ -42,20 +43,99 @@ thumbnail field
 '''
 from PIL import Image
 import requests
-import urllib
 from io import BytesIO
-def extract_im_brightness(url):
-    response = urllib.urlopen(url)
-    #response = requests.get(url, stream=True)
-    byteImg = np.array(Image.open(BytesIO(response.read())))
+#from skimage import io
+import urllib.request
+import binascii
+
+def extract_im_brightness(URL):
+    data = urllib.request.urlopen(URL).read()
+    #r_data = binascii.unhexlify(data)
+    response = requests.get(URL)
+    bytesIOobj = BytesIO( bytes(response.content))
+    bytesIOobj.seek(0)
+    byteIm = bytesIOobj.read()
+    #bytesIOobj.seek(0)
+    img = Image.open(byteIm)
+    img.save("test.png")
+    '''
+    response = requests.get(URL)
+    print(response.headers)   # confirms image type is 'bytes'
+    bytesIOobj = BytesIO(response.content)   # default mode is 'r'
+    Image.open(bytesIOobj)
+
+    # Read response.content into BytesIO buffer
+    BytesIOimage = BytesIO(response.content)
     
+    # Reset file cursor
+    BytesIOimage.seek(0)
+    
+    # Before opening image, I need to write BytesIOimage locally as a FILE-- not a BytesIO object
+    with open('temp.jpg', 'rb') as f:
+        f.write(BytesIOimage)
+    im = Image.open('temp.jpg')
+    '''
+    '''
+    with urllib.request.urlopen(URL) as url:
+        f = BytesIO(url.read())
+    img = Image.open(f)
+    img.show()
+
+
+    (filename, _) = urlretrieve(URL)
+    print(filename)
+    # Convert filename to jpg
+
+    response = requests.get(URL)
+    # Open file
+    im = Image.frombytes(response.content)
+    '''
+
+    
+    '''
+    
+    # download the image, convert it to a NumPy array, and then read
+    # it into OpenCV format
+    resp = urllib.urlopen(url)
+    image = np.asarray(bytearray(resp.read()), dtype="uint8")
+    image = cv2.imdecode(image, cv2.IMREAD_COLOR)
+    
+    # return the image
+    return image
+    '''
+
+
+    
+# Documentation: http://scikit-learn.org/stable/modules/generated/sklearn.feature_extraction.text.TfidfVectorizer.html
+from sklearn.feature_extraction.text import TfidfVectorizer
+def extract_caption_tf_idf(caption_text):
+    '''
+    vect = TfidfVectorizer(stop_words='english', max_df=0.50, min_df=2)
+    X = vect.fit_transform(caption_text)
+    print(X)
+    return X
+    '''
+    pass
+
+
+def vectorize(row):
+    # Initialize empty feature_vector as list
+    feature_vector = []
+
+    # Extract Features
+    extract_im_brightness(row['thumbnail'])
+    #feature_vector.append(extract_caption_tf_idf(row['caption']))
+
+    # Return converted numpy array
+    #return np.array(feature_vector)   
 
 number_of_features = 10
 feature_matrix = np.zeros((video_df.shape[0], number_of_features))
 for index, row in video_df.iterrows():
-    if index == 1:
-        extract_im_brightness(row['thumbnail'])
-        #print(row['id'])
+    # for now, just test on first row
+    if index == 0:
+        #feature_matrix[index] =
+        vectorize(row)
 
 
 '''
